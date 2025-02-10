@@ -122,6 +122,9 @@ class DataModule(pl.LightningDataModule):
         assert weight_stream > 0
 
         # Set batch size according to weights.
+        """
+        バッチサイズを重みに従って設定する. 例; 重みが1:1の場合, バッチサイズは元のバッチサイズの半分になる.
+        """
         bs_rnd = min(round(self.overall_batch_size_train * weight_random / (weight_stream + weight_random)),
                      self.overall_batch_size_train - 1)
         bs_str = self.overall_batch_size_train - bs_rnd
@@ -170,6 +173,9 @@ class DataModule(pl.LightningDataModule):
             raise NotImplementedError
 
     def train_dataloader(self):
+        """
+        MIXED モードだと, 2 つの DataLoader を返し, データローダ自体をbatchとする. それ以外の場合は, 1 つの DataLoader を返す.
+        """
         train_loaders = dict()
         for sampling_mode, dataset in self.sampling_mode_2_dataset.items():
             train_loaders[sampling_mode] = DataLoader(
