@@ -1,0 +1,12 @@
+numpy
+numba
+torch
+torchvision
+lightning
+hydra-core
+h5py
+hdf5plugin
+einops
+omegaconf
+tqdm
+StrEnum
