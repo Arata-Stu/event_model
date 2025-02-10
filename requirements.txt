@@ -1,12 +1,22 @@
+# 数値計算ライブラリ
 numpy
 numba
+
+# 機械学習・ディープラーニング関連
 torch
 torchvision
 lightning
-hydra-core
-h5py
-hdf5plugin
 einops
+
+# 設定管理・ユーティリティ
+hydra-core
 omegaconf
 tqdm
 StrEnum
+
+# ファイルフォーマット関連
+h5py
+hdf5plugin
+
+# 画像処理関連
+opencv-python
