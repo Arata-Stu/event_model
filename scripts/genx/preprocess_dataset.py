@@ -313,7 +313,7 @@ def get_base_delta_ts_for_labels_us(unique_label_ts_us: np.ndarray, dataset_type
     if dataset_type == 'gen1':
         delta_t_us_4hz = 250000
         return delta_t_us_4hz
-    assert dataset_type == 'gen4'
+    assert dataset_type == 'gen4' or dataset_type == 'VGA'
     diff_us = np.diff(unique_label_ts_us)
     median_diff_us = np.median(diff_us)
 
