@@ -174,7 +174,7 @@ class DataModule(pl.LightningDataModule):
 
     def train_dataloader(self):
         """
-        MIXED モードだと, 2 つの DataLoader を返し, データローダ自体をbatchとする. それ以外の場合は, 1 つの DataLoader を返す.
+        MIXED モードだと, 2 つの DataLoader を辞書として返し, データローダ自体をbatchとする. それ以外の場合は, 1 つの DataLoader を返す.
         """
         train_loaders = dict()
         for sampling_mode, dataset in self.sampling_mode_2_dataset.items():
