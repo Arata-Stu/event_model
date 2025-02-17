@@ -1,0 +1,18 @@
+defaults:
+  - _self_  
+  # - model: ???   # modelに"yolox" を設定すると、 config/model/yolox.yaml を読む
+  - dataset: ???  # datasetに"gen1" を設定すると、 config/dataset/gen1.yaml を読む
+  
+batch_size:
+  train: 1
+  eval: 1
+hardware:
+  num_workers:
+    train: 1
+    eval: 1
+  gpus: 0 
+
+output_path: outputs.mp4
+mode: 1
+fps: 10
+num_sequence: 1
