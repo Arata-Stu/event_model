@@ -2,12 +2,15 @@ import lightning as pl
 from omegaconf import DictConfig
 from modules.data.data_module import DataModule 
 from modules.model.rnn_module import  ModelModule as rnn_det_module
+from modules.model.dnn_module import  ModelModule as dnn_det_module
 
 def fetch_model_module(config: DictConfig) -> pl.LightningModule:
     model_str = config.model.name
-    if model_str == 'rnndet':
+    if model_str in {'rvt'}:
         
         return rnn_det_module(config)
+    elif model_str in {'YOLOX'}:
+        return dnn_det_module(config)
     raise NotImplementedError
 
 def fetch_data_module(config: DictConfig) -> pl.LightningDataModule:
