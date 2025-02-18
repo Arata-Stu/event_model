@@ -25,7 +25,7 @@ def build_model(cfg: DictConfig):
 
     print('inchannels:', in_channels)
 
-    strides = backbone.get_strides(cfg.fpn_cfg.in_stages)
+    strides = backbone.get_strides(cfg.neck.in_stages)
     print('strides:', strides)
 
     neck = build_neck(cfg.neck, in_channels=in_channels)
