@@ -16,7 +16,7 @@ model:
       - ???
 
 
-  fpn:
+  neck:
     name: PAFPN
     compile:
       enable: False

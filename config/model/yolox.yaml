@@ -4,7 +4,7 @@ defaults:
 name: YOLOX
 backbone:
   name: ???
-fpn:
+neck:
   name: ???
 head:
   name: ???
