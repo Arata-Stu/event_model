@@ -17,7 +17,7 @@ from data.utils.types import DatasetMode, DataType
 from data.utils.types import DataType
 from data.genx_utils.labels import ObjectLabels
 from modules.utils.detection import RNNStates
-from models.detection.yolox.utils.boxes import postprocess
+from models.layers.yolox.utils.boxes import postprocess
 
 LABELMAP_GEN1 = ("car", "pedestrian")
 LABELMAP_GEN4 = ('pedestrian', 'two wheeler', 'car', 'truck', 'bus', 'traffic sign', 'traffic light')
