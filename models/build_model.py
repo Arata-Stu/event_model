@@ -1,3 +1,5 @@
+from omegaconf import DictConfig
+
 from models.backbone.build_backbone import build_backbone
 from models.neck.build_neck import build_neck
 from models.head.build_head import build_head
@@ -15,17 +17,18 @@ class Model:
         output = self.head(features)
         return output
 
-def build_model(cfg):
-    """
-    cfgは以下のような構成を想定：
-    {
-        'backbone': { 'type': 'resnet', ... },
-        'neck': { 'type': 'fpn', ... },
-        'head': { 'type': 'detection', ... }
-    }
-    """
-    backbone = build_backbone(cfg['backbone'])
-    neck = build_neck(cfg['neck'])
-    head = build_head(cfg['head'])
+def build_model(cfg: DictConfig):
+    
+    backbone = build_backbone(cfg.backbone)
+
+    in_channels = backbone.get_stage_dims(cfg.neck.in_stages)
+
+    print('inchannels:', in_channels)
+
+    strides = backbone.get_strides(cfg.fpn_cfg.in_stages)
+    print('strides:', strides)
+
+    neck = build_neck(cfg.neck, in_channels=in_channels)
+    head = build_head(cfg.head, in_channels=in_channels, strides=strides)
     
     return Model(backbone, neck, head)
