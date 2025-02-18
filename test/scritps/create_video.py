@@ -8,6 +8,7 @@ from utils.vis_utils import create_video
 
 @hydra.main(config_path="../../config", config_name="visualize", version_base="1.2")
 def main(cfg: DictConfig):
+    OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True)
     print('------ Configuration ------')
     print(OmegaConf.to_yaml(cfg))
     print('---------------------------')

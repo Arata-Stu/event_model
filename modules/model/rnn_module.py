@@ -2,21 +2,21 @@ from typing import Any, Optional, Tuple, Union, Dict
 from warnings import warn
 
 import numpy as np
-import pytorch_lightning as pl
+import lightning as pl
 import torch
 import torch as th
 import torch.distributed as dist
 from omegaconf import DictConfig
-from pytorch_lightning.utilities.types import STEP_OUTPUT
+from lightning.pytorch.utilities.types import STEP_OUTPUT
 
 from data.genx_utils.labels import ObjectLabels
 from data.utils.types import DataType, LstmStates, ObjDetOutput, DatasetSamplingMode
-from models.detection.yolox.utils.boxes import postprocess
-from models.detection.yolox_extension.models.detector import YoloXDetector
+from models.layers.yolox.utils.boxes import postprocess
+from models.build_model import build_model
 from utils.evaluation.prophesee.evaluator import PropheseeEvaluator
 from utils.evaluation.prophesee.io.box_loading import to_prophesee
 from utils.padding import InputPadderFromShape
-from .utils.detection import BackboneFeatureSelector, EventReprSelector, RNNStates, Mode, mode_2_string, \
+from modules.utils.detection import BackboneFeatureSelector, EventReprSelector, RNNStates, Mode, mode_2_string, \
     merge_mixed_batches
 
 
@@ -25,13 +25,13 @@ class ModelModule(pl.LightningModule):
         super().__init__()
 
         self.full_config = full_config
-
         self.mdl_config = full_config.model
+
         ## modification in_res_hw -> self.in_res_hw
         self.in_res_hw = tuple(self.mdl_config.backbone.in_res_hw)
-        self.input_padder = InputPadderFromShape(desired_hw=in_res_hw)
+        self.input_padder = InputPadderFromShape(desired_hw=self.in_res_hw)
 
-        self.mdl = YoloXDetector(self.mdl_config)
+        self.mdl = build_model(self.mdl_config)
 
         self.mode_2_rnn_states: Dict[Mode, RNNStates] = {
             Mode.TRAIN: RNNStates(),

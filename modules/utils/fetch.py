@@ -1,4 +1,4 @@
-import pytorch_lightning as pl
+import lightning as pl
 from omegaconf import DictConfig
 from modules.data.data_module import DataModule 
 from modules.model.rnn_module import  ModelModule as rnn_det_module
@@ -6,6 +6,7 @@ from modules.model.rnn_module import  ModelModule as rnn_det_module
 def fetch_model_module(config: DictConfig) -> pl.LightningModule:
     model_str = config.model.name
     if model_str == 'rnndet':
+        
         return rnn_det_module(config)
     raise NotImplementedError
 
