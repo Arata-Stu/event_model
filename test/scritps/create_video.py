@@ -3,11 +3,14 @@ sys.path.append('../..')
 
 import hydra
 from omegaconf import DictConfig, OmegaConf
+
+from config.modifier import dynamically_modify_train_config
 from modules.utils.fetch import fetch_data_module, fetch_model_module
 from utils.vis_utils import create_video
 
 @hydra.main(config_path="../../config", config_name="visualize", version_base="1.2")
 def main(cfg: DictConfig):
+    dynamically_modify_train_config(cfg)
     OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True)
     print('------ Configuration ------')
     print(OmegaConf.to_yaml(cfg))
@@ -24,11 +27,11 @@ def main(cfg: DictConfig):
     data = fetch_data_module(config=cfg)
     ## モデルの読み込み
     model = None
-    # model = fetch_model_module(config=cfg)
-    # model.setup("test")
+    model = fetch_model_module(config=cfg)
+    model.setup("test")
     ##ビデオの作成
         
-    create_video(data, model, show_gt, show_pred, output_path, fps, num_sequence, dataset_mode)
+    # create_video(data, model, show_gt, show_pred, output_path, fps, num_sequence, dataset_mode)
 
 if __name__ == '__main__':
     main()
