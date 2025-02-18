@@ -12,7 +12,7 @@ try:
 except ImportError:
     th_compile = None
 
-from models.head.yolox.utils import bboxes_iou
+from ..utils import bboxes_iou
 
 from .losses import IOUloss
 from .network_blocks import BaseConv, DWConv
