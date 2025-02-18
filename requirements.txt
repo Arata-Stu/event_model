@@ -20,3 +20,4 @@ hdf5plugin
 
 # 画像処理関連
 opencv-python
+bbox_visualizer
