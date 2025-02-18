@@ -2,7 +2,7 @@ from functools import partial
 from typing import Any, Dict, Optional, Union
 
 import math
-import pytorch_lightning as pl
+import lightning as pl
 from omegaconf import DictConfig
 from torch.utils.data import DataLoader, Dataset
 
@@ -88,6 +88,9 @@ class DataModule(pl.LightningDataModule):
 
         assert self.train_sampling_mode in iter(DatasetSamplingMode)
         assert self.eval_sampling_mode in (DatasetSamplingMode.STREAM, DatasetSamplingMode.RANDOM)
+
+
+        self.dataset_name = dataset_config.name
 
         # In DDP all configs are per process/GPU (num_workers, batch_size, ...).
         self.overall_batch_size_train = batch_size_train
