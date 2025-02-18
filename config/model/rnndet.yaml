@@ -1,7 +1,7 @@
 defaults:
   - base
 
-name: rnndet
+name: rvt
 backbone:
   name: ???
 fpn:

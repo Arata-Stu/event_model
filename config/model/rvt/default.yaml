@@ -1,6 +1,6 @@
 # @package _global_
 defaults:
-  - override /model: rnndet
+  - override /model: rvt
 
 model:
   backbone:
