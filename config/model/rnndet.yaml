@@ -2,6 +2,7 @@ defaults:
   - base
 
 name: rvt
+model_type: RNN
 backbone:
   name: ???
 neck:

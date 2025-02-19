@@ -2,6 +2,7 @@ defaults:
   - base
 
 name: YOLOX
+model_type: DNN
 backbone:
   name: ???
 neck:
