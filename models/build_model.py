@@ -16,10 +16,13 @@ class DNNModel:
         self.head = head
         self.model_type = 'DNN'
 
-    def forward_backbone(self, x: th.Tensor,):
+    def forward_backbone(self,
+                         x: th.Tensor,
+                         token_mask: Optional[th.Tensor] = None) -> \
+            Tuple[BackboneFeatures, LstmStates]:
         with CudaTimer(device=x.device, timer_name="Backbone"):
-            backbone_features = self.backbone(x)
-        return backbone_features
+            backbone_features, states = self.backbone(x, token_mask)
+        return backbone_features, states
     
     def forward_neck(self, x):
         with CudaTimer(device=x.device, timer_name="Neck"):
@@ -39,9 +42,13 @@ class DNNModel:
         assert losses is None
         return outputs, losses
 
-    def forward(self, x: th.Tensor, targets: Optional[th.Tensor] = None):
+    def forward(self, x: th.Tensor, retrieve_detections: bool = True, targets: Optional[th.Tensor] = None):
         backbone_features = self.forward_backbone(x)
         neck_features = self.forward_neck(backbone_features)
+        outputs, losses = None, None
+        if not retrieve_detections:
+            assert targets is None
+            return outputs, losses
         outputs, losses = self.forward_head(neck_features, targets)
         return outputs, losses
     

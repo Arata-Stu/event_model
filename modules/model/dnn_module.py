@@ -83,12 +83,10 @@ class ModelModule(pl.LightningModule):
 
     def forward(self,
                 event_tensor: th.Tensor,
-                previous_states: Optional[LstmStates] = None,
                 retrieve_detections: bool = True,
                 targets=None) \
             -> Tuple[Union[th.Tensor, None], Union[Dict[str, th.Tensor], None], LstmStates]:
         return self.mdl(x=event_tensor,
-                        previous_states=previous_states,
                         retrieve_detections=retrieve_detections,
                         targets=targets)
 
