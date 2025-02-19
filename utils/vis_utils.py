@@ -4,7 +4,7 @@ Copyright: (c) 2019-2020 Prophesee
 """
 from __future__ import print_function
 
-from tqdm import tqdm  # これが必要
+from tqdm import tqdm  
 import bbox_visualizer as bbv
 import cv2
 import numpy as np
