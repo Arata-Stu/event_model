@@ -54,3 +54,4 @@ LstmStates = List[LstmState]
 
 FeatureMap = th.Tensor
 BackboneFeatures = Dict[int, th.Tensor]
+NeckFeatures = Dict[int, th.Tensor]
