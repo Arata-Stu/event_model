@@ -1,5 +1,5 @@
 defaults:
-  - _self_  
+  - general
   - model: ???   # modelに"yolox" を設定すると、 config/model/yolox.yaml を読む
   - dataset: ???  # datasetに"gen1" を設定すると、 config/dataset/gen1.yaml を読む
   
