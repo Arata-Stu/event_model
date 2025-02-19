@@ -10,6 +10,7 @@ def build_backbone(backbone_cfg: DictConfig) -> torch.nn.Module:
         backbone = None
         pass
     elif backbone_cfg.name == 'CSPDarknet':
+        print("backbone:  CSPDarknet")
         backbone = CSPDarknet(depth=backbone_cfg.depth,
                               width=backbone_cfg.width,
                               input_dim=backbone_cfg.input_channels,
