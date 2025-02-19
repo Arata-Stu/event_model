@@ -5,7 +5,7 @@ defaults:
 model:
   backbone:
     name: CSPDarknet
-    input_channels: 3
+    input_channels: 20
     out_features: [dark3, dark4, dark5]
     depth: 0.33
     width: 0.5 

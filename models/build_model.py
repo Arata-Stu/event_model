@@ -7,7 +7,7 @@ from models.neck.build_neck import build_neck
 from models.head.build_head import build_head
 
 from utils.timers import TimerDummy as CudaTimer
-from data.utils.types import BackboneFeatures, LstmStates
+from data.utils.types import BackboneFeatures, NeckFeatures, LstmStates
 
 class DNNModel(th.nn.Module):
     def __init__(self, backbone, neck, head):
@@ -21,17 +21,17 @@ class DNNModel(th.nn.Module):
                          x: th.Tensor,) -> \
             Tuple[BackboneFeatures, LstmStates]:
         with CudaTimer(device=x.device, timer_name="Backbone"):
-            backbone_features, states = self.backbone(x)
-        return backbone_features, states
+            backbone_features = self.backbone(x)
+        return backbone_features
     
-    def forward_neck(self, x):
-        with CudaTimer(device=x.device, timer_name="Neck"):
-            neck_features = self.neck(x)
+    def forward_neck(self, backbone_features: BackboneFeatures):
+        device = next(iter(backbone_features.values())).device
+        with CudaTimer(device=device, timer_name="Neck"):
+            neck_features = self.neck(backbone_features)
         return neck_features
-    
-    def forward_head(self, neck_features: BackboneFeatures, targets: Optional[th.Tensor] = None) -> Tuple[th.Tensor, Union[Dict[str, th.Tensor], None]]:
-        device = next(iter(neck_features.values())).device
-        
+
+    def forward_head(self, neck_features: NeckFeatures, targets: Optional[th.Tensor] = None) -> Tuple[th.Tensor, Union[Dict[str, th.Tensor], None]]:
+        device = neck_features[0].device
         if self.training:
             assert targets is not None
             with CudaTimer(device=device, timer_name="HEAD + Loss"):
@@ -69,13 +69,14 @@ class RNNModel(th.nn.Module):
             backbone_features, states = self.backbone(x, previous_states, token_mask)
         return backbone_features, states
     
-    def forward_neck(self, x):
-        with CudaTimer(device=x.device, timer_name="Neck"):
-            neck_features = self.neck(x)
+    def forward_neck(self, backbone_features: BackboneFeatures):
+        device = next(iter(backbone_features.values())).device
+        with CudaTimer(device=device, timer_name="Neck"):
+            neck_features = self.neck(backbone_features)
         return neck_features
     
-    def forward_head(self, neck_features: BackboneFeatures, targets: Optional[th.Tensor] = None) -> Tuple[th.Tensor, Union[Dict[str, th.Tensor], None]]:
-        device = next(iter(neck_features.values())).device
+    def forward_head(self, neck_features: NeckFeatures, targets: Optional[th.Tensor] = None) -> Tuple[th.Tensor, Union[Dict[str, th.Tensor], None]]:
+        device = neck_features[0].device
         
         if self.training:
             assert targets is not None
