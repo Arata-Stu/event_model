@@ -22,13 +22,12 @@ def build_model(cfg: DictConfig):
     backbone = build_backbone(cfg.backbone)
 
     in_channels = backbone.get_stage_dims(cfg.neck.in_stages)
-
-    print('inchannels:', in_channels)
-
     strides = backbone.get_strides(cfg.neck.in_stages)
-    print('strides:', strides)
 
     neck = build_neck(cfg.neck, in_channels=in_channels)
     head = build_head(cfg.head, in_channels=in_channels, strides=strides)
+
+    print('inchannels:', in_channels)
+    print('strides:', strides)
     
     return Model(backbone, neck, head)
