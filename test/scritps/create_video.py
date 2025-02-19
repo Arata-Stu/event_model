@@ -26,12 +26,10 @@ def main(cfg: DictConfig):
     ## データセットの読み込み
     data = fetch_data_module(config=cfg)
     ## モデルの読み込み
-    model = None
     model = fetch_model_module(config=cfg)
-    model.setup("test")
+
     ##ビデオの作成
-        
-    # create_video(data, model, show_gt, show_pred, output_path, fps, num_sequence, dataset_mode)
+    create_video(data, model, show_gt, show_pred, output_path, fps, num_sequence, dataset_mode)
 
 if __name__ == '__main__':
     main()
