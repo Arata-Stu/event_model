@@ -152,13 +152,11 @@ def visualize(video_writer: cv2.VideoWriter, ev_tensors: torch.Tensor, labels_yo
     if pred_processed is not None:
         img = draw_bboxes_bbv(img, pred_processed, dataset_name)
 
-    print(img.shape)
     video_writer.write(img)
 
 def create_video(data: pl.LightningDataModule , model: pl.LightningModule, show_gt: bool, show_pred: bool, output_path: str, fps: int, num_sequence: int, dataset_mode: DatasetMode):  
 
     data_size =  dataset2size[data.dataset_name]
-    print(data_size)
 
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     video_writer = cv2.VideoWriter(output_path, fourcc, fps, data_size)
@@ -167,12 +165,15 @@ def create_video(data: pl.LightningDataModule , model: pl.LightningModule, show_
     if dataset_mode == "train":
         data.setup('fit')
         data_loader = data.train_dataloader()
+        model.setup("fit")
     elif dataset_mode == "val":
         data.setup('validate')
         data_loader = data.val_dataloader()
+        model.setup("validate")
     elif dataset_mode == "test":
         data.setup('test')
         data_loader = data.test_dataloader()
+        model.setup("test")
     else:
         raise ValueError(f"Invalid dataset mode: {dataset_mode}")
     
