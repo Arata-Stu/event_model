@@ -9,19 +9,19 @@ from models.head.build_head import build_head
 from utils.timers import TimerDummy as CudaTimer
 from data.utils.types import BackboneFeatures, LstmStates
 
-class DNNModel:
+class DNNModel(th.nn.Module):
     def __init__(self, backbone, neck, head):
+        super().__init__()
         self.backbone = backbone
         self.neck = neck
         self.head = head
         self.model_type = 'DNN'
 
     def forward_backbone(self,
-                         x: th.Tensor,
-                         token_mask: Optional[th.Tensor] = None) -> \
+                         x: th.Tensor,) -> \
             Tuple[BackboneFeatures, LstmStates]:
         with CudaTimer(device=x.device, timer_name="Backbone"):
-            backbone_features, states = self.backbone(x, token_mask)
+            backbone_features, states = self.backbone(x)
         return backbone_features, states
     
     def forward_neck(self, x):
@@ -52,8 +52,9 @@ class DNNModel:
         outputs, losses = self.forward_head(neck_features, targets)
         return outputs, losses
     
-class RNNModel:
+class RNNModel(th.nn.Module):
     def __init__(self, backbone, neck, head):
+        super().__init__()
         self.backbone = backbone
         self.neck = neck
         self.head = head

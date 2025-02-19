@@ -164,14 +164,17 @@ def create_video(data: pl.LightningDataModule , model: pl.LightningModule, show_
 
 
     if dataset_mode == "train":
+        print("mode: train")
         data.setup('fit')
         data_loader = data.train_dataloader()
         model.setup("fit")
     elif dataset_mode == "val":
+        print("mode: val")
         data.setup('validate')
         data_loader = data.val_dataloader()
         model.setup("validate")
     elif dataset_mode == "test":
+        print("mode: test")
         data.setup('test')
         data_loader = data.test_dataloader()
         model.setup("test")
