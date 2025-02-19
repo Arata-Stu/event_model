@@ -14,6 +14,7 @@ class DNNModel:
         self.backbone = backbone
         self.neck = neck
         self.head = head
+        self.model_type = 'DNN'
 
     def forward_backbone(self, x: th.Tensor,):
         with CudaTimer(device=x.device, timer_name="Backbone"):
@@ -49,6 +50,7 @@ class RNNModel:
         self.backbone = backbone
         self.neck = neck
         self.head = head
+        self.model_type = 'RNN'
 
     def forward_backbone(self,
                          x: th.Tensor,
