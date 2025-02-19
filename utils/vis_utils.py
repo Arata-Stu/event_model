@@ -104,7 +104,6 @@ def draw_bboxes_bbv(img, boxes, dataset_name: str) -> np.ndarray:
     if scale_multiplier != 1:
         img = cv2.resize(img, dim_new_wh, interpolation=cv2.INTER_AREA)
     for i in range(boxes.shape[0]):
-        print(boxes)
         pt1 = (int(boxes['x'][i]), int(boxes['y'][i]))
         size = (int(boxes['w'][i]), int(boxes['h'][i]))
         pt2 = (pt1[0] + size[0], pt1[1] + size[1])
@@ -144,14 +143,81 @@ def draw_bboxes(img, boxes, labelmap=LABELMAP_GEN1) -> None:
         cv2.putText(img, class_name, (center[0], pt2[1] - 1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color)
         cv2.putText(img, str(score), (center[0], pt1[1] - 1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color)
 
+
+def draw_bboxes_with_id(img, boxes, dataset_name: str) -> None:
+    """
+    画像 img にバウンディングボックスを描画する関数
+    """
+    # カラーマップの生成（描画に使う色のリスト）
+    colors = cv2.applyColorMap(np.arange(0, 255).astype(np.uint8), cv2.COLORMAP_HSV)
+    colors = [tuple(*item) for item in colors.tolist()]
+
+    labelmap = dataset2labelmap[dataset_name]
+    scale_multiplier = dataset2scale[dataset_name]
+
+    add_score = True
+    ht, wd, ch = img.shape
+    dim_new_wh = (int(wd * scale_multiplier), int(ht * scale_multiplier))
+    if scale_multiplier != 1:
+        img = cv2.resize(img, dim_new_wh, interpolation=cv2.INTER_AREA)
+    
+    # boxes の各要素は (cls_id, cx, cy, w, h) としてループ
+    if len(boxes[0]) == 5:
+        for cls_id, cx, cy, w, h in boxes:
+            score = 1.0
+
+            # (cx, cy) を中心座標とした左上座標を計算
+            pt1 = (int(cx - w / 2), int(cy - h / 2))
+            pt2 = (int(cx + w / 2), int(cy + h / 2))
+            bbox = (pt1[0], pt1[1], pt2[0], pt2[1])
+
+            # スケール補正
+            bbox = tuple(int(x * scale_multiplier) for x in bbox)
+
+            class_id = int(cls_id)
+            class_name = labelmap[class_id % len(labelmap)]
+            bbox_txt = class_name
+            if add_score:
+                bbox_txt += f' {score:.2f}'
+            color_tuple_rgb = classid2colors[class_id]
+            img = bbv.draw_rectangle(img, bbox, bbox_color=color_tuple_rgb)
+            img = bbv.add_label(img, bbox_txt, bbox, text_bg_color=color_tuple_rgb, top=True)
+
+    elif len(boxes[0]) == 7:
+        for x1, y1, x2, y2, obj_conf, class_conf, class_id in boxes:
+            score = obj_conf * class_conf
+
+            pt1 = (int(x1), int(y1))
+            pt2 = (int(x2), int(y2))
+            bbox = (pt1[0], pt1[1], pt2[0], pt2[1])
+
+            bbox = tuple(int(x * scale_multiplier) for x in bbox)
+
+            class_id = int(class_id)
+            class_name = labelmap[class_id % len(labelmap)]
+            bbox_txt = class_name
+            if add_score:
+                bbox_txt += f' {score:.2f}'
+            color_tuple_rgb = classid2colors[class_id]
+            img = bbv.draw_rectangle(img, bbox, bbox_color=color_tuple_rgb)
+            img = bbv.add_label(img, bbox_txt, bbox, text_bg_color=color_tuple_rgb, top=True)
+    else:
+        raise ValueError("Invalid boxes format")
+    
+    return img
+
+
+
 def visualize(video_writer: cv2.VideoWriter, ev_tensors: torch.Tensor, labels_yolox: torch.Tensor, pred_processed: torch.Tensor, dataset_name:str):
     img = ev_repr_to_img(ev_tensors.squeeze().cpu().numpy())
     img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-    if labels_yolox is not None:
-        img = draw_bboxes_bbv(img, labels_yolox, dataset_name)
+    if labels_yolox is not None and labels_yolox[0] is not None:
+        labels_yolox = labels_yolox.cpu().numpy()[0]
+        img = draw_bboxes_with_id(img, labels_yolox, dataset_name)
 
-    if pred_processed is not None:
-        img = draw_bboxes_bbv(img, pred_processed, dataset_name)
+    if pred_processed is not None and pred_processed[0] is not None:
+        pred_processed = pred_processed[0].cpu().numpy()
+        img = draw_bboxes_with_id(img, pred_processed, dataset_name)
 
     video_writer.write(img)
 
