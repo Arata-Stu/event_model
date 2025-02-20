@@ -17,7 +17,7 @@ cudnn.allow_tf32 = True
 
 import hydra
 from omegaconf import DictConfig, OmegaConf
-import lightning as pl
+import lightning.pytorch as pl
 from lightning.pytorch.callbacks import LearningRateMonitor, ModelSummary
 from lightning.pytorch.strategies import DDPStrategy
 
