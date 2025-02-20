@@ -72,7 +72,8 @@ def run(data: pl.LightningDataModule , model: pl.LightningModule, is_pred: bool,
 
     ## device 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+    print(f"device: {device}")
+    
     if is_pred:
         model.eval()
         model.to(device)  # モデルをデバイスに移動
