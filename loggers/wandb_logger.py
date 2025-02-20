@@ -9,18 +9,22 @@ from typing import Any, Dict, List, Optional, Union
 from weakref import ReferenceType
 
 import numpy as np
-import pytorch_lightning as pl
+import lightning as pl
 import torch
 import torch.nn as nn
 
 pl_is_ge_1_6 = float(pl.__version__[:3]) >= 1.6
 assert pl_is_ge_1_6
 
-from pytorch_lightning.callbacks.model_checkpoint import ModelCheckpoint
-from pytorch_lightning.loggers.logger import rank_zero_experiment, Logger
-from pytorch_lightning.utilities.rank_zero import rank_zero_only, rank_zero_warn
-from pytorch_lightning.utilities.logger import _add_prefix, _convert_params, _flatten_dict, _sanitize_callable_params
-
+from lightning.pytorch.callbacks.model_checkpoint import ModelCheckpoint
+from lightning.pytorch.loggers.logger import rank_zero_experiment, Logger
+from lightning.pytorch.utilities.rank_zero import rank_zero_only, rank_zero_warn
+from lightning.fabric.utilities.logger import (
+    _add_prefix,
+    _convert_params,
+    _flatten_dict,
+    _sanitize_callable_params,
+)
 import wandb
 from wandb.sdk.lib import RunDisabled
 from wandb.wandb_run import Run
