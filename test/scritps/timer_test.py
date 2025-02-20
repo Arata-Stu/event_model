@@ -54,16 +54,19 @@ def run(data: pl.LightningDataModule , model: pl.LightningModule, is_pred: bool,
         data.setup('fit')
         data_loader = data.train_dataloader()
         model.setup("fit")
+        model.train()
     elif dataset_mode == "val":
         print("mode: val")
         data.setup('validate')
         data_loader = data.val_dataloader()
         model.setup("validate")
+        model.eval()
     elif dataset_mode == "test":
         print("mode: test")
         data.setup('test')
         data_loader = data.test_dataloader()
         model.setup("test")
+        model.eval()
     else:
         raise ValueError(f"Invalid dataset mode: {dataset_mode}")
     
