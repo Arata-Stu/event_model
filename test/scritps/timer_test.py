@@ -110,13 +110,15 @@ def run(data: pl.LightningDataModule , model: pl.LightningModule, is_pred: bool,
             ## モデルの推論
             if is_pred:
                 ev_tensors_padded = input_padder.pad_tensor_ev_repr(ev_tensors)
-                if model.mdl.model_type == 'DNN':
-                    predictions, _ = model.forward(event_tensor=ev_tensors_padded)
-                elif model.mdl.model_type == 'RNN':
-                    predictions, _, states = model.forward(event_tensor=ev_tensors_padded, previous_states=prev_states)
-                    prev_states = states
-                    rnn_state.save_states_and_detach(worker_id=0, states=prev_states)
-                
+
+                with torch.no_grad():
+                    if model.mdl.model_type == 'DNN':
+                        predictions, _ = model.forward(event_tensor=ev_tensors_padded)
+                    elif model.mdl.model_type == 'RNN':
+                        predictions, _, states = model.forward(event_tensor=ev_tensors_padded, previous_states=prev_states)
+                        prev_states = states
+                        rnn_state.save_states_and_detach(worker_id=0, states=prev_states)
+                    
                 pred_processed = postprocess(prediction=predictions, num_classes=num_classes, conf_thre=0.1, nms_thre=0.45)
 
     print("Finished")
