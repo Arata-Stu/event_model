@@ -17,8 +17,8 @@ validation:
   val_check_interval: 10000
   check_val_every_n_epoch: null
 batch_size:
-  train: 12
-  eval: 12
+  train: 6
+  eval: 6
 hardware:
   num_workers:
     train: 6
