@@ -20,8 +20,8 @@ num_sequence: 1
 dataset_mode: test
 
 hydra:
-  run:
-    dir: ./
+  # run:
+  #   dir: ./
   output_subdir: null
   job_logging:
     version: 1
