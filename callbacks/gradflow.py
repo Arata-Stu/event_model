@@ -1,6 +1,6 @@
 from typing import Any
 
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 from pytorch_lightning.callbacks import Callback
 from pytorch_lightning.utilities.rank_zero import rank_zero_only
 

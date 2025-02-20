@@ -1,5 +1,5 @@
 from omegaconf import DictConfig
-from pytorch_lightning.callbacks import ModelCheckpoint
+from lightning.pytorch.callbacks import ModelCheckpoint
 
 
 def get_ckpt_callback(config: DictConfig) -> ModelCheckpoint:
