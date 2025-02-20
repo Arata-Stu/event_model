@@ -2,7 +2,7 @@ from typing import Any, Optional, Tuple, Union, Dict
 from warnings import warn
 
 import numpy as np
-import lightning as pl
+import lightning.pytorch as pl
 import torch
 import torch as th
 import torch.distributed as dist

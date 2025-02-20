@@ -2,7 +2,7 @@ from functools import partial
 from typing import Any, Dict, Optional, Union
 
 import math
-import lightning as pl
+import lightning.pytorch as pl
 from omegaconf import DictConfig
 from torch.utils.data import DataLoader, Dataset
 
