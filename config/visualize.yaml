@@ -2,7 +2,7 @@ defaults:
   - general
   - model: ???   
   - dataset: ???  
-  
+  - _self_
 batch_size:
   train: 1
   eval: 1
