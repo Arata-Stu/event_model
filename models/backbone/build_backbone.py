@@ -21,6 +21,6 @@ def build_backbone(backbone_cfg: DictConfig) -> torch.nn.Module:
                               act=backbone_cfg.act,
                               in_res_hw=backbone_cfg.in_res_hw)
     else:
-        raise NotImplementedError(f"Backbone {backbone.name} is not implemented")
+        raise NotImplementedError(f"Backbone {backbone_cfg.name} is not implemented")
     
     return backbone
