@@ -17,11 +17,11 @@ cudnn.allow_tf32 = True
 
 import hydra
 from omegaconf import DictConfig, OmegaConf
-import lightning as pl
-from lightning.pytorch.callbacks import LearningRateMonitor, ModelSummary
-from lightning.pytorch.strategies import DDPStrategy
+import pytorch_lightning as pl
+from pytorch_lightning.callbacks import LearningRateMonitor, ModelSummary
+from pytorch_lightning.strategies import DDPStrategy
 
-from callbacks.custom import get_ckpt_callback
+from callbacks.custom import get_ckpt_callback, get_viz_callback
 from callbacks.gradflow import GradFlowLogCallback
 from config.modifier import dynamically_modify_train_config
 from data.utils.types import DatasetSamplingMode
@@ -62,9 +62,15 @@ def main(config: DictConfig):
     gpus = gpus if isinstance(gpus, list) else [gpus]
     distributed_backend = config.hardware.dist_backend
     assert distributed_backend in ('nccl', 'gloo'), f'{distributed_backend=}'
-    strategy = DDPStrategy(process_group_backend=distributed_backend,
-                           find_unused_parameters=False,
-                           gradient_as_bucket_view=True) if len(gpus) > 1 else None
+    strategy = (
+        DDPStrategy(
+            process_group_backend=distributed_backend,
+            find_unused_parameters=True,
+            gradient_as_bucket_view=True,
+        )
+        if len(gpus) > 1
+        else "auto"
+    )
 
     # ---------------------
     # Data
@@ -96,7 +102,9 @@ def main(config: DictConfig):
     callbacks.append(GradFlowLogCallback(config.logging.train.log_model_every_n_steps))
     if config.training.lr_scheduler.use:
         callbacks.append(LearningRateMonitor(logging_interval='step'))
-        
+    # if config.logging.train.high_dim.enable or config.logging.validation.high_dim.enable:
+    #     viz_callback = get_viz_callback(config=config)
+    #     callbacks.append(viz_callback)
     callbacks.append(ModelSummary(max_depth=2))
 
     logger.watch(model=module, log='all', log_freq=config.logging.train.log_model_every_n_steps, log_graph=True)
@@ -128,8 +136,8 @@ def main(config: DictConfig):
         max_epochs=config.training.max_epochs,
         max_steps=config.training.max_steps,
         strategy=strategy,
-        sync_batchnorm=False if strategy == "auto" else True,
-        # move_metrics_to_cpu=False,
+        sync_batchnorm=False if strategy is None else True,
+        move_metrics_to_cpu=False,
         benchmark=config.reproduce.benchmark,
         deterministic=config.reproduce.deterministic_flag,
     )
