@@ -4,10 +4,12 @@ import torch
 from omegaconf import DictConfig
 
 from .yolox_darknet import CSPDarknet
+from .rvt_lstm import RVT
 
 def build_backbone(backbone_cfg: DictConfig) -> torch.nn.Module:
-    if backbone_cfg.name == 'MaxViTRNN':
-        backbone = None
+    if backbone_cfg.name == 'RVT':
+        print("backbone:  RVT")
+        backbone = RVT(mdl_config=backbone_cfg)
         pass
     elif backbone_cfg.name == 'CSPDarknet':
         print("backbone:  CSPDarknet")

@@ -18,8 +18,8 @@ from models.layers.maxvit.maxvit import (
     get_downsample_layer_Cf2Cl,
     PartitionType)
 
-## RVT Stage
-class RNNDetector(nn.Module):
+## RVT Stage 全体
+class RVT(nn.Module):
     def __init__(self, mdl_config: DictConfig):
         super().__init__()
 
