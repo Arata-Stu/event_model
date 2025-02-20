@@ -129,7 +129,7 @@ def main(config: DictConfig):
         max_steps=config.training.max_steps,
         strategy=strategy,
         sync_batchnorm=False if strategy is None else True,
-        move_metrics_to_cpu=False,
+        # move_metrics_to_cpu=False,
         benchmark=config.reproduce.benchmark,
         deterministic=config.reproduce.deterministic_flag,
     )
