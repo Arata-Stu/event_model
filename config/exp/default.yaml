@@ -1,7 +1,6 @@
 # @package _global_
 defaults:
-  - default
-
+  - /model: base
 
 training:
   precision: 16
@@ -18,9 +17,23 @@ validation:
   val_check_interval: 10000
   check_val_every_n_epoch: null
 batch_size:
-  train: 6
-  eval: 6
+  train: 12
+  eval: 12
 hardware:
   num_workers:
     train: 6
     eval: 2
+dataset:
+  train:
+    sampling: 'mixed'
+    random:
+      weighted_sampling: False
+    mixed:
+      w_stream: 1
+      w_random: 1
+  eval:
+    sampling: 'stream'
+  ev_repr_name: 'stacked_histogram_dt=50_nbins=10'
+  sequence_length: 10
+  downsample_by_factor_2: True
+  only_load_end_labels: False
