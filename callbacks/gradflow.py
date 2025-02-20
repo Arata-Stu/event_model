@@ -1,8 +1,8 @@
 from typing import Any
 
 import lightning.pytorch as pl
-from pytorch_lightning.callbacks import Callback
-from pytorch_lightning.utilities.rank_zero import rank_zero_only
+from lightning.pytorch.callbacks import Callback
+from lightning.pytorch.utilities.rank_zero import rank_zero_only
 
 from callbacks.utils.visualization import get_grad_flow_figure
 
