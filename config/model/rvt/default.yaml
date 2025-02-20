@@ -9,7 +9,7 @@ model:
       enable: False
       args:
         mode: reduce-overhead
-    input_channels: 3
+    input_channels: 20
     enable_masking: False
     partition_split_32: 2
     embed_dim: 64
