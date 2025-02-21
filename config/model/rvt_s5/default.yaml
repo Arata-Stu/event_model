@@ -35,11 +35,9 @@ model:
         drop_mlp: 0
         drop_path: 0
         ls_init_value: 1e-5
-      lstm:
-        dws_conv: False
-        dws_conv_only_hidden: True
-        dws_conv_kernel_size: 3
-        drop_cell_update: 0
+      s5:
+        dim: 80
+        state_dim: 80
   neck:
     name: PAFPN
     compile:
