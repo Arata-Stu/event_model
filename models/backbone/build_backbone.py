@@ -6,6 +6,7 @@ from omegaconf import DictConfig
 from .yolox_darknet import CSPDarknet
 from .rvt_lstm import RVT
 from .rvt_s5 import RVT_S5
+from .sast import SAST
 
 def build_backbone(backbone_cfg: DictConfig) -> torch.nn.Module:
     if backbone_cfg.name == 'RVT':
@@ -14,6 +15,9 @@ def build_backbone(backbone_cfg: DictConfig) -> torch.nn.Module:
     elif backbone_cfg.name == 'RVT_S5':
         print("backbone:  RVT_S5")
         backbone = RVT_S5(mdl_config=backbone_cfg)
+    elif backbone.cfg.name == 'SAST':
+        print("backbone:  SAST")
+        backbone = SAST(mdl_config=backbone_cfg)
         
     elif backbone_cfg.name == 'CSPDarknet':
         print("backbone:  CSPDarknet")
