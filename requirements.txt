@@ -2,6 +2,7 @@
 numpy
 numba
 pandas
+scikit-learn
 
 # 機械学習・ディープラーニング関連
 torch
@@ -9,6 +10,7 @@ torchvision
 lightning
 einops
 wandb
+# triton
 
 # 設定管理・ユーティリティ
 hydra-core
