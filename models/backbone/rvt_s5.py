@@ -20,7 +20,7 @@ from models.layers.maxvit.maxvit import (
     PartitionType)
 
 ## RVT Stage 全体
-class RVT(nn.Module):
+class RVT_S5(nn.Module):
     def __init__(self, mdl_config: DictConfig):
         super().__init__()
 
