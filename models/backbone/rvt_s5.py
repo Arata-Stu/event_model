@@ -90,7 +90,7 @@ class RVT(nn.Module):
         assert max(stage_indices) < len(self.stages), stage_indices
         return tuple(self.strides[stage_idx] for stage_idx in stage_indices)
 
-    def forward(self, x: th.Tensor, prev_states: Optional[LstmStates] = None, token_mask: Optional[th.Tensor] = None) \
+    def forward(self, x: th.Tensor, prev_states: Optional[LstmStates] = None, token_mask: Optional[th.Tensor] = None, train_step: bool = True) \
             -> Tuple[BackboneFeatures, LstmStates]:
         if prev_states is None:
             prev_states = [None] * self.num_stages
@@ -98,7 +98,12 @@ class RVT(nn.Module):
         states: LstmStates = list()
         output: Dict[int, FeatureMap] = {}
         for stage_idx, stage in enumerate(self.stages):
-            x, state = stage(x, prev_states[stage_idx], token_mask if stage_idx == 0 else None)
+            x, state = stage(
+                x,
+                prev_states[stage_idx],
+                token_mask if stage_idx == 0 else None,
+                train_step,
+            )
             states.append(state)
             stage_number = stage_idx + 1
             output[stage_number] = x
