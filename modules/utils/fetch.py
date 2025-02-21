@@ -7,7 +7,7 @@ from modules.model.ssm_module import  ModelModule as ssm_det_module
 
 def fetch_model_module(config: DictConfig) -> pl.LightningModule:
     model_str = config.model.name
-    if model_str in {'rvt', 'sast'}:
+    if model_str in {'rvt'}:
         return rnn_det_module(config)
     elif model_str in {'rvt_s5'}:
         return ssm_det_module(config)

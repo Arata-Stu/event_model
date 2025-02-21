@@ -14,11 +14,7 @@ def build_backbone(backbone_cfg: DictConfig) -> torch.nn.Module:
         backbone = RVT(mdl_config=backbone_cfg)
     elif backbone_cfg.name == 'RVT_S5':
         print("backbone:  RVT_S5")
-        backbone = RVT_S5(mdl_config=backbone_cfg)
-    elif backbone.cfg.name == 'SAST':
-        print("backbone:  SAST")
-        backbone = SAST(mdl_config=backbone_cfg)
-        
+        backbone = RVT_S5(mdl_config=backbone_cfg)        
     elif backbone_cfg.name == 'CSPDarknet':
         print("backbone:  CSPDarknet")
         backbone = CSPDarknet(depth=backbone_cfg.depth,
