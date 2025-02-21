@@ -21,10 +21,10 @@ def dynamically_modify_train_config(config: DictConfig):
 
         mdl_cfg = config.model
         mdl_name = mdl_cfg.name
-        if mdl_name in {'rvt'}:
+        if mdl_name in {'rvt', 'rvt_s5'}:
             backbone_cfg = mdl_cfg.backbone
             backbone_name = backbone_cfg.name
-            if backbone_name == 'RVT':
+            if backbone_name in {'RVT', 'RVT_S5'}:
                 partition_split_32 = backbone_cfg.partition_split_32
                 assert partition_split_32 in (1, 2, 4)
 
