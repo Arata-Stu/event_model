@@ -113,7 +113,7 @@ def build_model(cfg: DictConfig):
 
     if cfg.model_type == 'DNN':
         return DNNModel(backbone, neck, head)
-    elif cfg.model_type == 'RNN':
+    elif cfg.model_type in{'RNN', 'SSM'}:
         return RNNModel(backbone, neck, head)
     else:
         NotImplementedError(f"Model type {cfg.model_type} is not implemented")
