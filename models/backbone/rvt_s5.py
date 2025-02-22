@@ -90,7 +90,7 @@ class RVT_S5(nn.Module):
         assert max(stage_indices) < len(self.stages), stage_indices
         return tuple(self.strides[stage_idx] for stage_idx in stage_indices)
 
-    def forward(self, x: th.Tensor, prev_states: Optional[LstmStates] = None, token_mask: Optional[th.Tensor] = None, train_step: bool = True) \
+    def forward(self, x: th.Tensor, prev_states: Optional[LstmStates] = None, token_mask: Optional[th.Tensor] = None) \
             -> Tuple[BackboneFeatures, LstmStates]:
         if prev_states is None:
             prev_states = [None] * self.num_stages
@@ -102,7 +102,6 @@ class RVT_S5(nn.Module):
                 x,
                 prev_states[stage_idx],
                 token_mask if stage_idx == 0 else None,
-                train_step,
             )
             states.append(state)
             stage_number = stage_idx + 1
@@ -148,7 +147,6 @@ class RVTBlock(nn.Module):
         super().__init__()
         assert isinstance(num_blocks, int) and num_blocks > 0
         downsample_cfg = stage_cfg.downsample
-        lstm_cfg = stage_cfg.lstm
         attention_cfg = stage_cfg.attention
 
         self.downsample_cf2cl = get_downsample_layer_Cf2Cl(
@@ -197,7 +195,6 @@ class RVTBlock(nn.Module):
         x: th.Tensor,
         states: Optional[LstmState] = None,
         token_mask: Optional[th.Tensor] = None,
-        train_step: bool = True,
     ) -> Tuple[FeatureMap, LstmState]:
         sequence_length = x.shape[0]
         batch_size = x.shape[1]

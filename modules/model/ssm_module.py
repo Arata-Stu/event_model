@@ -300,7 +300,6 @@ class ModelModule(pl.LightningModule):
         backbone_features, states = self.mdl.forward_backbone(
             x=ev_tensor_sequence,
             previous_states=prev_states,
-            train_step=False,
         )
 
         prev_states = states
