@@ -2,7 +2,7 @@ defaults:
   - base
 
 name: rvt_s5
-model_type: SMM
+model_type: SSM
 backbone:
   name: ???
 neck:
