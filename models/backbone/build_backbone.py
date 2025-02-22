@@ -6,7 +6,6 @@ from omegaconf import DictConfig
 from .yolox_darknet import CSPDarknet
 from .rvt_lstm import RVT
 from .rvt_s5 import RVT_S5
-from .sast import SAST
 
 def build_backbone(backbone_cfg: DictConfig) -> torch.nn.Module:
     if backbone_cfg.name == 'RVT':
