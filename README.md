@@ -31,10 +31,13 @@ GPU_IDS=0 ## [0, 1] 0 ...
 BATCH_SIZE_PER_GPU=8
 TRAIN_WORKERS_PER_GPU=6
 EVAL_WORKERS_PER_GPU=2
+PROJECT='RVT'
+GROUP='duration_50'
 python3 train.py dataset=${DATASET} model=${MODEL} +model/${MODEL_SIZE}=${MODEL_SIZE}.yaml +exp=train \
 dataset.path=${DATA_DIR} hardware.gpus=${GPU_IDS} \
 hardware.num_workers.train=${TRAIN_WORKERS_PER_GPU} hardware.num_workers.eval=${EVAL_WORKERS_PER_GPU} \
-batch_size.train=${BATCH_SIZE_PER_GPU} batch_size.eval=${BATCH_SIZE_PER_GPU}
+batch_size.train=${BATCH_SIZE_PER_GPU} batch_size.eval=${BATCH_SIZE_PER_GPU} \
+wandb.project_name=${PROJECT} wandb.group_name=${GROUP}
 ```
 
 ## 3. Eval
