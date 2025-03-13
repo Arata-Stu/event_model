@@ -769,35 +769,32 @@ if __name__ == '__main__':
         split_out_dir = target_dir / split
         os.makedirs(split_out_dir, exist_ok=True)
 
-        """
-        modification : ディレクトリ構造を変更
-        """
+        # *_bbox.npy のファイルをすべて検索
+        for npy_file in split_dir.glob("*_bbox.npy"):
+            # ファイル名例: "sequence_003_bbox.npy" → シーケンス識別子 "sequence_003"
+            sequence_id = npy_file.stem.replace("_bbox", "")
 
-        for sequence_dir in split_dir.iterdir():
-            if not sequence_dir.is_dir():
-                continue
-
+            # dataset に応じて h5 ファイル名を決定
             if dataset == "gen1":
-                npy_file = sequence_dir / f"{sequence_dir.name}_bbox.npy"
-                h5f_path = sequence_dir / f"{sequence_dir.name}_td.dat.h5"
-            elif dataset == "gen4":
-                npy_file = sequence_dir / f"{sequence_dir.name}_bbox.npy"
-                h5f_path = sequence_dir / f"{sequence_dir.name}_td.h5"
+                h5_filename = f"{sequence_id}_td.dat.h5"
+            elif dataset in {"gen4", "VGA"}:
+                h5_filename = f"{sequence_id}_td.h5"
             else:
-                raise ValueError(f"Unsupported dataset type: {dataset}")
+                raise ValueError(f"Unsupported dataset: {dataset}")
 
-            if not npy_file.exists() or not h5f_path.exists():
-                print(f"Missing required files in {sequence_dir}")
+            h5f_path = split_dir / h5_filename
+            if not h5f_path.exists():
+                print(f"Missing required file for sequence {sequence_id}")
                 continue
 
-            dir_name = sequence_dir.name
-            if dir_name in dirs_to_ignore[dataset]:
+            # 除外対象のシーケンスかどうかチェック
+            if sequence_id in dirs_to_ignore[dataset]:
                 continue
 
-            out_seq_path = split_out_dir / dir_name
+            # 出力先ディレクトリの作成
+            out_seq_path = split_out_dir / sequence_id
             out_labels_path = out_seq_path / 'labels_v2'
             os.makedirs(out_labels_path, exist_ok=True)
-
             out_ev_repr_parent_path = out_seq_path / 'event_representations_v2'
             out_ev_repr_path = out_ev_repr_parent_path / ev_repr_string
             os.makedirs(out_ev_repr_path, exist_ok=True)
