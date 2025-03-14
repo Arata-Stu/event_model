@@ -822,7 +822,7 @@ if __name__ == '__main__':
     else:
         assert config.event_window_extraction.method == AggregationType.DURATION
         ## イベント表現を生成する時に使われるイベントの時間 例: 過去100msのイベントを利用してイベントヒストグラムを生成
-        ev_repr_delta_ts_ms = config.event_window_extraction.ev_repr_delta_ts_ms
+        ev_repr_delta_ts_ms = config.event_window_extraction.value
          ## イベント表現を生成する間隔
         ts_step_ev_repr_ms = config.event_window_extraction.ts_step_ev_repr_ms
 
